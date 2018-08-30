@@ -11,11 +11,17 @@ class Life extends StatefulWidget {
 class _LifeState extends State<Life> {
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<GameState, GameState>(
-      converter: (store) => store.state,
-      builder: (context, store) {
+    return new StoreConnector<GameState, Map>(
+      converter: (store) => store.state.map,
+      builder: (context, map) {
         return new Row(
-          children: store.map.keys.map((index) => new LifeElement(store.map[index])).toList(),
+          children: map.keys.map<Widget>((index) => new Column(
+            children: map[index].keys.map<Widget>((jIndex) => new LifeElement(index, jIndex)).toList(),
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+          )).toList(),
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
         );
       },
     );
