@@ -1,6 +1,12 @@
+import 'dart:async';
+
+import 'package:redux/redux.dart';
+
 enum Actions {
   STEP,
   NEGATE_ELEMENT,
+  START,
+  STOP,
 }
 class Action {
   Actions type;
@@ -46,6 +52,8 @@ class GameState {
     }
   }
 }
+
+var gameTimer;
   
 GameState gameReducer(GameState state, dynamic action) {
   Actions type = action.type;
@@ -58,4 +66,20 @@ GameState gameReducer(GameState state, dynamic action) {
   }
 
   return GameState.fromOther(state);
+}
+
+gameMiddleware(Store<GameState> store, action, NextDispatcher next) {
+  Actions type = action.type;
+  Map<String, dynamic> payload = action.payload;
+
+  if (type == Actions.START) {
+    Timer.periodic(new Duration(milliseconds: 1200), (timer) {
+      store.dispatch({type: Actions.STEP, payload: {}});
+      gameTimer = timer;
+    });
+  } else if (type == Actions.STOP) {
+    gameTimer.cancel();
+  }
+
+  next(action);
 }

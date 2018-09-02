@@ -12,7 +12,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(title: Text('Game of Life')),
       body: Center(
-        child: Life(),
+        child: Column(
+          children: <Widget>[
+            new Life(),
+            new FloatingActionButton(child: Icon(Icons.play_arrow), onPressed: () {}),
+          ],
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+        ),
       ),
     );
   }
