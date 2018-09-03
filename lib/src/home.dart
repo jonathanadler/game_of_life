@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:game_of_life/src/Life.dart';
+import 'package:game_of_life/src/settings.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,8 +15,8 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: Column(
           children: <Widget>[
-            new Life(),
-            new FloatingActionButton(child: Icon(Icons.play_arrow), onPressed: () {}),
+            new Expanded(child: new Life()),
+            new Settings(),
           ],
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

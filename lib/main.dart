@@ -5,7 +5,7 @@ import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 void main() { 
-  final store = new Store<GameState>(gameReducer, initialState: new GameState());
+  final store = new Store<GameState>(gameReducer, initialState: new GameState(), middleware: [gameMiddleware]);
   
   runApp(new MyApp(store: store));
 }

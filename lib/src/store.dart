@@ -12,7 +12,7 @@ class Action {
   Actions type;
   Map<String, dynamic> payload;
   
-  Action(this.type, this.payload);
+  Action(this.type, [this.payload]);
 }
 
 class GameState {
@@ -73,8 +73,9 @@ gameMiddleware(Store<GameState> store, action, NextDispatcher next) {
   Map<String, dynamic> payload = action.payload;
 
   if (type == Actions.START) {
-    Timer.periodic(new Duration(milliseconds: 1200), (timer) {
-      store.dispatch({type: Actions.STEP, payload: {}});
+    Timer.periodic(new Duration(milliseconds: 1000), (timer) {
+      print('adler hererererere!!!!!!!!!!!!!!!!!!!!!!!!');
+      store.dispatch(new Action(Actions.STEP));
       gameTimer = timer;
     });
   } else if (type == Actions.STOP) {
