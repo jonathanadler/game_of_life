@@ -9,19 +9,39 @@ class Settings extends StatefulWidget {
   }
 }
 
+class SettingsConnectedData {
+  Function callback;
+  bool isPlaying;
+
+  SettingsConnectedData(this.isPlaying, this.callback);
+}
+
 class SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<GameState, VoidCallback>(
-      converter: (store) => () {
-        store.dispatch(new Action(Actions.START));
+    return new StoreConnector<GameState, SettingsConnectedData>(
+      converter: (store) {
+        return new SettingsConnectedData(store.state.isPlaying, (Actions action) {
+          VoidCallback callAction () {
+            store.dispatch(new Action(action));
+          }
+          return callAction;
+        });
       },
-      builder: (context, onPress) {
+      builder: (context, connectedData) {
+        bool isPlaying = connectedData.isPlaying;
+        IconData icon = isPlaying == true ? Icons.stop : Icons.play_arrow;
+
         return new Container(
           height: 80.0,
           child: new FloatingActionButton(
-              child: Icon(Icons.play_arrow), onPressed: () {
-                onPress();
+              child: Icon(icon), 
+              onPressed: () {
+                if (isPlaying == true) {
+                  connectedData.callback(Actions.STOP)();
+                } else {
+                  connectedData.callback(Actions.START)();
+                }
               }
           )
         );

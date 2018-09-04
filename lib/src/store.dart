@@ -18,6 +18,7 @@ class Action {
 class GameState {
   final map = {};
   int size = 10;
+  bool isPlaying = false;
 
   GameState() {
     for (int i = 0; i < size; i++) {
@@ -42,6 +43,7 @@ class GameState {
 
   GameState.fromOther(GameState other) {
     this.size = other.size;
+    this.isPlaying = other.isPlaying;
 
     for (int i = 0; i < size; i++) {
       map[i] = {};
@@ -59,10 +61,20 @@ GameState gameReducer(GameState state, dynamic action) {
   Actions type = action.type;
   Map<String, dynamic> payload = action.payload;
 
-  if (type == Actions.NEGATE_ELEMENT) {
-    int i = payload['i'];
-    int j = payload['j'];
-    state.map[i][j] = !state.map[i][j];
+  switch (type) {
+    case Actions.START:
+      state.isPlaying = true;
+      break;
+    case Actions.STOP:
+      state.isPlaying = false;
+      break;
+    case Actions.STEP:
+      break;
+    case Actions.NEGATE_ELEMENT:
+      int i = payload['i'];
+      int j = payload['j'];
+      state.map[i][j] = !state.map[i][j];
+      break;
   }
 
   return GameState.fromOther(state);
@@ -70,15 +82,16 @@ GameState gameReducer(GameState state, dynamic action) {
 
 gameMiddleware(Store<GameState> store, action, NextDispatcher next) {
   Actions type = action.type;
-  Map<String, dynamic> payload = action.payload;
 
   if (type == Actions.START) {
+      print('starting game!');
     Timer.periodic(new Duration(milliseconds: 1000), (timer) {
-      print('adler hererererere!!!!!!!!!!!!!!!!!!!!!!!!');
+      print('this is a step');
       store.dispatch(new Action(Actions.STEP));
       gameTimer = timer;
     });
   } else if (type == Actions.STOP) {
+    print('stopping game!');
     gameTimer.cancel();
   }
 

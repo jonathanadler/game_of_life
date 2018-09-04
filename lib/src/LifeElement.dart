@@ -15,7 +15,7 @@ class LifeElement extends StatelessWidget {
       converter: (store) => store,
       builder: (context, store) {
         var state = store.state;
-        var onTap = () => store.dispatch(new Action(Actions.NEGATE_ELEMENT, {'i': this.index, 'j': this.jIndex}));
+        var onTap = (dragStartDetails) => store.dispatch(new Action(Actions.NEGATE_ELEMENT, {'i': this.index, 'j': this.jIndex}));
         var darkColor = Colors.black;
         var lightColor = Colors.white;
         var color = state.map[this.index][this.jIndex] == true ? darkColor : lightColor;
@@ -24,15 +24,22 @@ class LifeElement extends StatelessWidget {
         var bottomBorder = new BorderSide(color: this.jIndex == state.size - 1 ? darkColor : lightColor);
 
         return new GestureDetector(
-          onTap: onTap,
-          child: new Center(
-            child: new Container(
-              width: 24.0,
-              height: 24.0,
-              decoration: new BoxDecoration(
-                color: color,
-                border: new Border(top: borderSide, left: borderSide, bottom: bottomBorder, right: rightBorder)
-              ),
+          behavior: HitTestBehavior.translucent,
+          onPanStart: onTap,
+          child: new Container(
+            width: 24.0,
+            height: 24.0,
+            margin: EdgeInsets.all(0.0),
+            padding: EdgeInsets.all(0.0),
+            decoration: new BoxDecoration(
+              color: color,
+              shape: BoxShape.rectangle,
+              border: new Border(
+                top: borderSide,
+                left: borderSide,
+                bottom: bottomBorder,
+                right: rightBorder
+              )
             ),
           ),
         );
